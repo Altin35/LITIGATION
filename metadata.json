@@ -1,0 +1,6 @@
+{
+  "name": "Land Litigation Tracking System",
+  "description": "A comprehensive system to search, add, and track land litigation cases using survey numbers, featuring document uploads and status tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
