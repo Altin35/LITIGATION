@@ -81,9 +81,23 @@ export default function HomePage({ isDark }: { isDark: boolean }) {
               <span className="text-xs font-bold text-blue-700 dark:text-blue-300 uppercase tracking-widest">Authorized Registry Access</span>
             </div>
             
-            <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1]">
-              National Land <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">Litigation Tracking</span>
+            <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-8 leading-[1.1] flex flex-col">
+              <span>National Land</span>
+              <span className="flex items-center gap-4 flex-wrap">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">Litigation Tracking</span>
+                <motion.div
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.8 }}
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600 dark:bg-blue-400"></span>
+                  </span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">Tracking Active</span>
+                </motion.div>
+              </span>
             </h1>
             
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-xl mb-12 leading-relaxed font-medium">
