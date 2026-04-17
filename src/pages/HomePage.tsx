@@ -3,14 +3,29 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, MapPin, Scale, ShieldAlert } from 'lucide-react';
 import { motion } from 'motion/react';
+import { LitigationRecord } from '../types.ts';
 
 export default function HomePage() {
   const [query, setQuery] = useState('');
+  const [records, setRecords] = useState<LitigationRecord[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('/api/litigation');
+        const data = await res.json();
+        setRecords(data);
+      } catch (error) {
+        console.error('Failed to fetch stats:', error);
+      }
+    };
+    fetchStats();
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,6 +33,28 @@ export default function HomePage() {
       navigate(`/search?q=${encodeURIComponent(query)}`);
     }
   };
+
+  const activeCases = records.filter(r => r.caseStatus === 'Pending' || r.caseStatus === 'In Progress').length;
+  const closedCases = records.filter(r => r.caseStatus === 'Closed').length;
+  const districts = new Set(records.map(r => r.district.trim().toLowerCase())).size;
+
+  const lastUpdated = records.reduce((latest, r) => {
+    const dates = [new Date(r.createdDate)];
+    if (r.updatedDate) dates.push(new Date(r.updatedDate));
+    const max = Math.max(...dates.map(d => d.getTime()));
+    return max > latest ? max : latest;
+  }, 0);
+
+  const lastUpdatedStr = lastUpdated > 0 
+    ? new Date(lastUpdated).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+    : 'None';
+
+  const stats = [
+    { label: 'Active Cases', val: activeCases > 0 ? activeCases : '0', color: 'text-blue-600' },
+    { label: 'Districts Covered', val: districts > 0 ? districts : '0', color: 'text-indigo-600' },
+    { label: 'Closed Cases', val: closedCases > 0 ? closedCases : '0', color: 'text-emerald-600' },
+    { label: 'Last Updated', val: lastUpdatedStr, color: 'text-amber-600' },
+  ];
 
   return (
     <div className="flex flex-col items-center">
@@ -62,12 +99,7 @@ export default function HomePage() {
 
           {/* District Quick Stats */}
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-            {[
-              { label: 'Active Cases', val: '2.4k+', color: 'text-blue-600' },
-              { label: 'Districts Covered', val: '32', color: 'text-indigo-600' },
-              { label: 'Closed Cases', val: '1.8k+', color: 'text-emerald-600' },
-              { label: 'Last Updated', val: 'Today', color: 'text-amber-600' },
-            ].map((stat, i) => (
+            {stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 10 }}
@@ -82,6 +114,7 @@ export default function HomePage() {
           </div>
         </motion.div>
       </div>
+
 
       {/* Info Sections */}
       <div className="w-full bg-white border-y border-gray-100 py-24">

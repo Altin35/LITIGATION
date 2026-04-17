@@ -21,4 +21,5 @@ export interface LitigationRecord {
   remarks: string;
   documentUrl?: string | null;
   createdDate: string;
+  updatedDate?: string;
 }
