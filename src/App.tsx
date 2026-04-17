@@ -23,7 +23,13 @@ import {
   Menu,
   CheckCircle,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Palette,
+  Layout as LayoutIcon,
+  Monitor,
+  Database,
+  Moon,
+  Sun
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { LitigationRecord } from './types.ts';
@@ -37,7 +43,19 @@ import UpdateCasePage from './pages/UpdateCasePage.tsx';
 import AdminDashboard from './pages/AdminDashboard.tsx';
 import LoginPage from './pages/LoginPage.tsx';
 
-function Layout({ children, isAdmin, setIsAdmin }: { children: React.ReactNode, isAdmin: boolean, setIsAdmin: (val: boolean) => void }) {
+function Layout({ 
+  children, 
+  isAdmin, 
+  setIsAdmin, 
+  isDark, 
+  setIsDark 
+}: { 
+  children: React.ReactNode, 
+  isAdmin: boolean, 
+  setIsAdmin: (val: boolean) => void,
+  isDark: boolean,
+  setIsDark: (val: boolean) => void
+}) {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -48,24 +66,37 @@ function Layout({ children, isAdmin, setIsAdmin }: { children: React.ReactNode, 
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] font-sans selection:bg-blue-100 selection:text-blue-900">
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'dark bg-gray-950' : 'bg-[#F8F9FA]'}`}>
       {/* Navbar */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-gray-200">
+      <nav className={`sticky top-0 z-50 border-b transition-colors duration-300 ${
+        isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <Link to="/" className="flex items-center space-x-2 group">
-              <div className="bg-blue-600 p-2 rounded-lg group-hover:bg-blue-700 transition-colors">
+              <div className="bg-blue-600 p-2 rounded-lg transition-colors">
                 <Scale className="h-6 w-6 text-white" />
               </div>
               <div>
-                <span className="text-xl font-bold tracking-tight text-gray-900 leading-none block">LITIGATION</span>
-                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-widest mt-0.5">TRACKING SYSTEM</span>
+                <span className={`text-xl font-bold tracking-tight leading-none block ${isDark ? 'text-white' : 'text-gray-900'}`}>LITIGATION</span>
+                <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mt-0.5 whitespace-nowrap">TRACKING SYSTEM</span>
               </div>
             </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-6">
-              <Link to="/" className="text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors">Home</Link>
+              {/* Dark Mode Toggle */}
+              <button 
+                onClick={() => setIsDark(!isDark)}
+                className={`p-2 rounded-full transition-all ${
+                  isDark ? 'bg-gray-800 text-amber-400 border-gray-700' : 'bg-gray-100 text-gray-500 border-gray-200'
+                } border hover:scale-105 active:scale-95`}
+                title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              >
+                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </button>
+
+              <Link to="/" className={`text-sm font-medium transition-colors ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-500 hover:text-blue-600'}`}>Home</Link>
               {isAdmin ? (
                 <>
                   <Link to="/admin" className="text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors">Dashboard</Link>
@@ -152,19 +183,30 @@ function Layout({ children, isAdmin, setIsAdmin }: { children: React.ReactNode, 
 
 export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const adminStatus = localStorage.getItem('isAdmin');
     if (adminStatus === 'true') {
       setIsAdmin(true);
     }
+    
+    const savedDark = localStorage.getItem('isDark');
+    if (savedDark === 'true') {
+      setIsDark(true);
+    }
   }, []);
+
+  const handleDarkToggle = (val: boolean) => {
+    setIsDark(val);
+    localStorage.setItem('isDark', val.toString());
+  };
 
   return (
     <BrowserRouter>
-      <Layout isAdmin={isAdmin} setIsAdmin={setIsAdmin}>
+      <Layout isAdmin={isAdmin} setIsAdmin={setIsAdmin} isDark={isDark} setIsDark={handleDarkToggle}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage isDark={isDark} />} />
           <Route path="/search" element={<SearchResultsPage />} />
           <Route path="/record/:id" element={<CaseDetailPage isAdmin={isAdmin} />} />
           <Route path="/add-record" element={isAdmin ? <AddCasePage /> : <LoginPage setIsAdmin={setIsAdmin} />} />
