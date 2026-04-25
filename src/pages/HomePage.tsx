@@ -11,6 +11,8 @@ import {
   Scale, 
   ShieldCheck,
   ChevronRight,
+  ArrowRight,
+  FileText,
   Activity,
   Globe,
   Database,
@@ -153,6 +155,44 @@ export default function HomePage({ isDark }: { isDark: boolean }) {
               </div>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* EC Download Promotion Section */}
+      <section className="relative overflow-hidden group">
+        <div className={`absolute inset-0 bg-blue-600 rounded-[3rem] transition-transform duration-500 group-hover:scale-[1.01]`} />
+        <div className="relative p-12 lg:p-16 flex flex-col lg:flex-row items-center justify-between gap-12 text-white">
+          <div className="max-w-xl">
+            <div className="inline-flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full mb-6 border border-white/20">
+              <span className="text-[10px] font-bold uppercase tracking-widest">New Feature</span>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-black mb-6 tracking-tight leading-tight">
+              Instant Encumbrance <br /> Certificate Retrieval
+            </h2>
+            <p className="text-lg opacity-80 font-medium mb-8">
+              Download digitally signed EC documents for any property in Tamil Nadu. Our system cross-references national registration archives for instant generation.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <button 
+                onClick={() => navigate('/ec-download')}
+                className="px-8 py-4 bg-white text-blue-600 font-bold rounded-2xl hover:bg-gray-100 transition-all flex items-center space-x-2 shadow-xl shadow-black/10"
+              >
+                <span>Access EC Portal</span>
+                <ArrowRight className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+          <div className="hidden lg:block relative">
+             <div className="bg-white/10 backdrop-blur-md p-8 rounded-[2rem] border border-white/20 rotate-3 group-hover:rotate-0 transition-transform duration-700">
+                <FileText className="h-24 w-24 opacity-40 mb-4" />
+                <div className="h-2 w-32 bg-white/20 rounded-full mb-2" />
+                <div className="h-2 w-24 bg-white/20 rounded-full mb-2" />
+                <div className="h-2 w-16 bg-white/20 rounded-full" />
+             </div>
+             <div className="absolute -top-4 -right-4 bg-emerald-500 p-4 rounded-full shadow-lg animate-bounce">
+                <ShieldCheck className="h-6 w-6" />
+             </div>
+          </div>
         </div>
       </section>
 

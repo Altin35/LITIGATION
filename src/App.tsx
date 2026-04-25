@@ -42,6 +42,7 @@ import CaseDetailPage from './pages/CaseDetailPage.tsx';
 import UpdateCasePage from './pages/UpdateCasePage.tsx';
 import AdminDashboard from './pages/AdminDashboard.tsx';
 import LoginPage from './pages/LoginPage.tsx';
+import ECDownloadPage from './pages/ECDownloadPage.tsx';
 
 function Layout({ 
   children, 
@@ -97,6 +98,7 @@ function Layout({
               </button>
 
               <Link to="/" className={`text-sm font-medium transition-colors ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-500 hover:text-blue-600'}`}>Home</Link>
+              <Link to="/ec-download" className={`text-sm font-medium transition-colors ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-500 hover:text-blue-600'}`}>EC Download</Link>
               {isAdmin ? (
                 <>
                   <Link to="/admin" className="text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors">Dashboard</Link>
@@ -140,6 +142,7 @@ function Layout({
             >
               <div className="px-4 pt-2 pb-6 space-y-1">
                 <Link onClick={() => setIsMobileMenuOpen(false)} to="/" className="block px-3 py-4 text-base font-medium text-gray-700 border-b border-gray-50 hover:bg-gray-50">Home</Link>
+                <Link onClick={() => setIsMobileMenuOpen(false)} to="/ec-download" className="block px-3 py-4 text-base font-medium text-gray-700 border-b border-gray-50 hover:bg-gray-50">EC Download</Link>
                 {isAdmin ? (
                   <>
                     <Link onClick={() => setIsMobileMenuOpen(false)} to="/admin" className="block px-3 py-4 text-base font-medium text-gray-700 border-b border-gray-50 hover:bg-gray-50">Dashboard</Link>
@@ -207,6 +210,7 @@ export default function App() {
       <Layout isAdmin={isAdmin} setIsAdmin={setIsAdmin} isDark={isDark} setIsDark={handleDarkToggle}>
         <Routes>
           <Route path="/" element={<HomePage isDark={isDark} />} />
+          <Route path="/ec-download" element={<ECDownloadPage isDark={isDark} />} />
           <Route path="/search" element={<SearchResultsPage />} />
           <Route path="/record/:id" element={<CaseDetailPage isAdmin={isAdmin} />} />
           <Route path="/add-record" element={isAdmin ? <AddCasePage /> : <LoginPage setIsAdmin={setIsAdmin} />} />
