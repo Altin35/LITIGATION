@@ -15,7 +15,7 @@ import {
   Scale
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import jsPDF from 'jspdf';
+import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 // Dummy Data
@@ -152,7 +152,7 @@ export default function ECDownloadPage({ isDark }: { isDark: boolean }) {
       // 1. Litigation Status Section (NEW)
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(0, 0, 0);
-      doc.text('Judicial & Litigation Status:', 20, 80);
+      doc.text('Judicial and Litigation Status:', 20, 80);
       
       const isLitigationActive = litigationFound.some(r => r.caseStatus !== 'Closed');
       
@@ -163,7 +163,8 @@ export default function ECDownloadPage({ isDark }: { isDark: boolean }) {
 
       doc.setFontSize(11);
       doc.setTextColor(isLitigationActive ? 185 : 0, isLitigationActive ? 28 : 100, isLitigationActive ? 28 : 0);
-      doc.text(isLitigationActive ? '⚠ ACTIVE LITIGATION FOUND' : '✅ NO ACTIVE LITIGATION PENDING', 105, 93, { align: 'center' });
+      const statusMessage = isLitigationActive ? 'ALERT: ACTIVE LITIGATION FOUND' : 'NO ACTIVE LITIGATION PENDING';
+      doc.text(statusMessage, 105, 93, { align: 'center' });
       
       // Owner Box
       doc.setFontSize(10);
